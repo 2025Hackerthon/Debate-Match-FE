@@ -4,14 +4,17 @@ import { Input } from "../components/common/Input";
 import { Button } from "../components/common/Button";
 import { Dropdown } from "../components/common/Dropdown";
 import { Text } from "../components/common/Text";
-import { theme } from "../styles/theme";
 import { useNavigate } from "react-router-dom";
+import type { DEBATETheme } from "../styles/theme";
+import { useTheme } from "@emotion/react";
 
 export const Signup = () => {
   const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [grade, setGrade] = useState("");
+
+  const theme = useTheme() as DEBATETheme;
 
   const options = [
     "없음",
@@ -158,13 +161,13 @@ const DropdownWrapper = styled.div`
 
 const BottomText = styled.div`
   font-size: 14px;
-  color: ${theme.colors.gray[500]};
+  color: ${({ theme }) => theme.colors.gray[500]};
 `;
 
 const LoginButton = styled.button`
   background: none;
   border: none;
-  color: ${theme.colors.blue[500]};
+  color: ${({ theme }) => theme.colors.blue[500]};
   margin-left: 6px;
   cursor: pointer;
   font-weight: 500;
