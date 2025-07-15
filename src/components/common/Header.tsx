@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { theme } from "../../styles/theme";
 import { Button } from "../common/Button";
 import Logo from "../../assets/Logo.png";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   isLoggedIn: boolean;
@@ -9,8 +10,10 @@ interface IProps {
 }
 
 export const Header = ({ isLoggedIn, username }: IProps) => {
+  const navigate = useNavigate();
+
   const onLogin = () => {
-    // 로그인 페이지로 이동
+    navigate("/login");
   };
   const onSignup = () => {
     // 회원가입 페이지로 이동
