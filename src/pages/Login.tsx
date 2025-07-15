@@ -1,20 +1,25 @@
 import styled from "@emotion/styled";
 import { Input } from "../components/common/Input";
 import { Button } from "../components/common/Button";
-import { theme } from "../styles/theme";
 import { Text } from "../components/common/Text";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "@emotion/react";
+import type { DEBATETheme } from "../styles/theme";
 
 export const Login = () => {
+  const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+
+  const theme = useTheme() as DEBATETheme;
 
   const handleLogin = () => {
     // 로그인 처리 로직
   };
 
   const handleSignup = () => {
-    // 회원가입 페이지 이동
+    navigate("/signup");
   };
 
   return (
@@ -113,13 +118,13 @@ const ButtonWrapper = styled.div`
 
 const BottomText = styled.div`
   font-size: 14px;
-  color: ${theme.colors.gray[500]};
+  color: ${({ theme }) => theme.colors.gray[500]};
 `;
 
 const SignUpButton = styled.button`
   background: none;
   border: none;
-  color: ${theme.colors.blue[500]};
+  color: ${({ theme }) => theme.colors.blue[500]};
   margin-left: 6px;
   cursor: pointer;
   font-weight: 500;
