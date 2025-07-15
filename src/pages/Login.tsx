@@ -4,8 +4,10 @@ import { Button } from "../components/common/Button";
 import { theme } from "../styles/theme";
 import { Text } from "../components/common/Text";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
+  const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,7 +16,7 @@ export const Login = () => {
   };
 
   const handleSignup = () => {
-    // 회원가입 페이지 이동
+    navigate("/signup");
   };
 
   return (

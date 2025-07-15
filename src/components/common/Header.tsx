@@ -16,7 +16,7 @@ export const Header = ({ isLoggedIn, username }: IProps) => {
     navigate("/login");
   };
   const onSignup = () => {
-    // 회원가입 페이지로 이동
+    navigate("/signup");
   };
   const onViewRecords = () => {
     // 기록열람 페이지로 이동
