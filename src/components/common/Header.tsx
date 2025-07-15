@@ -3,6 +3,11 @@ import { theme } from "../../styles/theme";
 import { Button } from "../common/Button";
 import Logo from "../../assets/Logo.png";
 import { useNavigate } from "react-router-dom";
+import { useModal } from "../../hooks/useModal";
+import { CreateDebateModal } from "../modal/CreateDebateModal";
+import { WaitingModal } from "../modal/WaitingModal";
+import { RuleModal } from "../modal/RuleModal";
+import { AccountDeleteModal } from "../modal/AccountDeleteModal";
 
 interface IProps {
   isLoggedIn: boolean;
@@ -10,8 +15,12 @@ interface IProps {
 }
 
 export const Header = ({ isLoggedIn, username }: IProps) => {
+  const { isOpen, openModal, closeModal } = useModal();
   const navigate = useNavigate();
 
+  const onMain = () => {
+    navigate(isLoggedIn ? "/home" : "/");
+  };
   const onLogin = () => {
     navigate("/login");
   };
@@ -19,49 +28,53 @@ export const Header = ({ isLoggedIn, username }: IProps) => {
     navigate("/signup");
   };
   const onViewRecords = () => {
-    // 기록열람 페이지로 이동
-  };
-  const onCreateDebate = () => {
-    // 모달창
+    navigate("/records");
   };
   const onMyPage = () => {
     // 마이페이지로 이동
   };
 
   return (
-    <Container>
-      <Left>
-        <LogoWrapper>
-          <img
-            src={Logo}
-            alt="로고"
-            height={36}
-            style={{ cursor: "pointer" }}
-          />
-        </LogoWrapper>
-        {isLoggedIn && (
-          <>
-            <NavText onClick={onCreateDebate}>토론생성</NavText>
-            <NavText onClick={onViewRecords}>기록열람</NavText>
-          </>
-        )}
-      </Left>
+    <>
+      {/* 모달 테스트 하던 것들 */}
+      <CreateDebateModal isOpen={isOpen} onClose={closeModal} />
+      {/* <WaitingModal isOpen={isOpen} onClose={closeModal} /> */}
+      {/* <RuleModal isOpen={isOpen} onClose={closeModal} /> */}
+      {/* <AccountDeleteModal isOpen={isOpen} onClose={closeModal} /> */}
+      <Container>
+        <Left>
+          <LogoWrapper onClick={onMain}>
+            <img
+              src={Logo}
+              alt="로고"
+              height={36}
+              style={{ cursor: "pointer" }}
+            />
+          </LogoWrapper>
+          {isLoggedIn && (
+            <>
+              <NavText onClick={openModal}>토론생성</NavText>
+              <NavText onClick={onViewRecords}>기록열람</NavText>
+            </>
+          )}
+        </Left>
 
-      <Right>
-        {isLoggedIn ? (
-          <>
-            <Button onClick={onMyPage}>{username}</Button>
-          </>
-        ) : (
-          <>
-            <NavText onClick={onSignup}>회원가입</NavText>
-            <Button variant="blue" onClick={onLogin}>
-              로그인
-            </Button>
-          </>
-        )}
-      </Right>
-    </Container>
+        <Right>
+          {isLoggedIn ? (
+            <>
+              <Button onClick={onMyPage}>{username}</Button>
+            </>
+          ) : (
+            <>
+              <NavText onClick={onSignup}>회원가입</NavText>
+              <Button variant="blue" onClick={onLogin}>
+                로그인
+              </Button>
+            </>
+          )}
+        </Right>
+      </Container>
+    </>
   );
 };
 
