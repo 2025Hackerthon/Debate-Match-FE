@@ -33,18 +33,14 @@ export interface ColorPalette {
 export interface SubColorPalette {
   10?: string;
   20?: string;
-  30?: string;
-  40?: string;
 }
 
 export interface ThemeColor {
   blue: ColorPalette;
   gray: ColorPalette;
   sub: {
-    red: SubColorPalette;
-    green: SubColorPalette;
-    blue: SubColorPalette;
-    yellow: SubColorPalette;
+    normal: SubColorPalette;
+    error: SubColorPalette;
   };
 }
 
@@ -107,23 +103,13 @@ export const theme: DEBATETheme = {
       900: "oklch(0.208 0.042 265.755)"
     },
     sub: {
-      red: {
-        10: "#FCE9E7",
-        20: "#E74C3C"
+      normal: {
+        10: "#ffffff",
+        20: "#000000"
       },
-      green: {
-        10: "#E5F8EE",
-        20: "#2ECC71"
-      },
-      blue: {
-        10: "#F2F6FF",
-        20: "#E0EBF6",
-        30: "#237BC9",
-        40: "#002C53"
-      },
-      yellow: {
-        10: "#FDF7E2",
-        20: "#F1C40F"
+      error: {
+        10: "#FFE6D8",
+        20: "#DB2C36"
       }
     }
   },

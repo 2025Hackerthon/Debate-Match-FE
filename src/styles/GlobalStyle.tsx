@@ -1,5 +1,5 @@
 import { Global, css } from "@emotion/react";
-import Pretendard from "./assets/fonts/PretendardVariable.woff2";
+import Pretendard from "../assets/fonts/PretendardVariable.woff2";
 
 export const GlobalStyle = () => {
   return (
