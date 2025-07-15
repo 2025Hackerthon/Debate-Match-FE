@@ -4,7 +4,7 @@ import { ThemeProvider } from "@emotion/react";
 import { theme } from "./styles/theme";
 import { Header } from "./components/common/Header";
 import { Footer } from "./components/common/Footer";
-import { LandingPage } from "./pages/Landing";
+import { Landing } from "./pages/Landing";
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
         <Header isLoggedIn={false} />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<Landing />} />
           </Routes>
         </BrowserRouter>
         <Footer />

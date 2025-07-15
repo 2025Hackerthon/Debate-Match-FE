@@ -4,7 +4,7 @@ import { theme } from "../styles/theme";
 import { FaUserFriends, FaComments, FaTrophy, FaBook } from "react-icons/fa";
 import { Text } from "../components/common/Text";
 
-export const LandingPage = () => {
+export const Landing = () => {
   const onLogin = () => {
     // 로그인 이동
   };
