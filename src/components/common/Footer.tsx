@@ -7,10 +7,6 @@ export const Footer = () => {
     <FooterWrapper>
       <Content>
         <Left>
-          <InfoText>
-            대표자: 갓병건 | 개인정보보호책임자: asdf | 이메일: asdf@asdf.com |
-            문의: 010-0000-0000
-          </InfoText>
           <Copyright>© 2025 Debate Match All rights reserved.</Copyright>
         </Left>
         <Right>
@@ -53,11 +49,6 @@ const Left = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-`;
-
-const InfoText = styled.p`
-  font-size: 12px;
-  color: ${theme.colors.gray[500]};
 `;
 
 const Copyright = styled.p`
