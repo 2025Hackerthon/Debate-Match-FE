@@ -29,7 +29,7 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <Backdrop onClick={onClose}>
+    <Backdrop>
       <ModalWrapper onClick={e => e.stopPropagation()}>{children}</ModalWrapper>
     </Backdrop>
   );
