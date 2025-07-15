@@ -3,10 +3,13 @@ import { Button } from "../components/common/Button";
 import { theme } from "../styles/theme";
 import { FaUserFriends, FaComments, FaTrophy, FaBook } from "react-icons/fa";
 import { Text } from "../components/common/Text";
+import { useNavigate } from "react-router-dom";
 
 export const Landing = () => {
+  const navigate = useNavigate();
+
   const onLogin = () => {
-    // 로그인 이동
+    navigate("/login");
   };
 
   return (
