@@ -1,25 +1,21 @@
 export interface FontStyle {
   fontSize: string;
   lineHeight: string;
+  weight: string;
 }
 
 export interface TextStyles {
-  h1: FontStyle;
-  h2: FontStyle;
-  h3: FontStyle;
-  h4: FontStyle;
-  h5: FontStyle;
-  h6: FontStyle;
-  body1: FontStyle;
-  body2: FontStyle;
-  body3: FontStyle;
-  caption: FontStyle;
-}
-
-export interface FontWeight {
-  bold: string;
-  medium: string;
-  regular: string;
+  LabelSmall: FontStyle;
+  LabelMedium: FontStyle;
+  LabelLarge: FontStyle;
+  BodyTiny: FontStyle;
+  BodySmall: FontStyle;
+  BodyMedium: FontStyle;
+  BodyLarge: FontStyle;
+  TitleTiny: FontStyle;
+  TitleSmall: FontStyle;
+  TitleMedium: FontStyle;
+  TitleLarge: FontStyle;
 }
 
 export interface ColorPalette {
@@ -55,32 +51,36 @@ export interface ThemeColor {
 export interface DEBATETheme {
   colors: ThemeColor;
   font: TextStyles;
-  fontWeight: FontWeight;
 }
 
-const fontToCss = (size: number, lineHeight: number): FontStyle => ({
+const fontToCss = (
+  size: number,
+  lineHeight: number,
+  weight: number
+): FontStyle => ({
   fontSize: `${size}px`,
-  lineHeight: `${lineHeight}px`
+  lineHeight: `${lineHeight}px`,
+  weight: weight.toString()
 });
 
 const textStyles: TextStyles = {
-  h1: fontToCss(40, 60),
-  h2: fontToCss(36, 54),
-  h3: fontToCss(32, 48),
-  h4: fontToCss(28, 40),
-  h5: fontToCss(24, 36),
-  h6: fontToCss(20, 28),
-  body1: fontToCss(18, 26),
-  body2: fontToCss(16, 24),
-  body3: fontToCss(14, 20),
-  caption: fontToCss(12, 18)
+  LabelSmall: fontToCss(14, 20, 500),
+  LabelMedium: fontToCss(16, 24, 500),
+  LabelLarge: fontToCss(18, 24, 500),
+  BodyTiny: fontToCss(14, 20, 400),
+  BodySmall: fontToCss(16, 24, 400),
+  BodyMedium: fontToCss(18, 24, 400),
+  BodyLarge: fontToCss(20, 32, 400),
+  TitleTiny: fontToCss(16, 24, 600),
+  TitleSmall: fontToCss(24, 32, 600),
+  TitleMedium: fontToCss(36, 48, 600),
+  TitleLarge: fontToCss(48, 64, 600)
 };
 
-const fontWeight: FontWeight = {
-  bold: "700",
-  medium: "500",
-  regular: "400"
-};
+//   bold: "700",
+//   medium: "500",
+//   regular: "400"
+// };
 
 export const theme: DEBATETheme = {
   colors: {
@@ -127,6 +127,5 @@ export const theme: DEBATETheme = {
       }
     }
   },
-  font: textStyles,
-  fontWeight: fontWeight
+  font: textStyles
 };
