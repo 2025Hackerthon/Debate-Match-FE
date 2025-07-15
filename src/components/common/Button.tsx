@@ -20,7 +20,7 @@ export const Button = ({
   const theme = useTheme() as DEBATETheme;
 
   const font =
-    size === "small" ? theme.font.LabelMedium : theme.font.LabelLarge;
+    size === "small" ? theme.font.LabelSmall : theme.font.LabelMedium;
 
   return (
     <StyledButton size={size} variant={variant} font={font} {...rest}>
@@ -30,8 +30,8 @@ export const Button = ({
 };
 
 const sizePadding = {
-  small: "6px 14px",
-  large: "12px 24px"
+  small: "5px 8px",
+  large: "10px 8px"
 };
 
 const StyledButton = styled.button<{
