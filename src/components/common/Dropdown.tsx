@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { useState, useRef, useEffect } from "react";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
-import { theme } from "../../styles/theme";
 
 interface DropdownProps {
   options: string[];
@@ -81,9 +80,9 @@ const Wrapper = styled.div`
 const Selected = styled.div`
   padding: 12px 16px;
   border-radius: 8px;
-  border: 1px solid ${theme.colors.gray[200]};
-  background-color: ${theme.colors.gray[100]};
-  color: ${theme.colors.sub.normal[20]};
+  border: 1px solid ${({ theme }) => theme.colors.gray[200]};
+  background-color: ${({ theme }) => theme.colors.gray[100]};
+  color: ${({ theme }) => theme.colors.sub.normal[20]};
   font-size: 15px;
   display: flex;
   justify-content: space-between;
@@ -92,11 +91,11 @@ const Selected = styled.div`
   user-select: none;
 
   .placeholder {
-    color: ${theme.colors.gray[500]};
+    color: ${({ theme }) => theme.colors.gray[500]};
   }
 
   &:hover {
-    border-color: ${theme.colors.blue[400]};
+    border-color: ${({ theme }) => theme.colors.blue[400]};
   }
 `;
 
@@ -105,7 +104,7 @@ const Menu = styled.ul<{ dropUp: boolean }>`
   width: 100%;
   border-radius: 8px;
   background-color: white;
-  border: 1px solid ${theme.colors.gray[200]};
+  border: 1px solid ${({ theme }) => theme.colors.gray[200]};
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   z-index: 10;
   padding: 4px 0;
@@ -126,11 +125,11 @@ const Menu = styled.ul<{ dropUp: boolean }>`
 const MenuItem = styled.li`
   padding: 12px 16px;
   font-size: 14px;
-  color: ${theme.colors.sub.normal[20]};
+  color: ${({ theme }) => theme.colors.sub.normal[20]};
   cursor: pointer;
   list-style: none;
 
   &:hover {
-    background-color: ${theme.colors.gray[100]};
+    background-color: ${({ theme }) => theme.colors.gray[100]};
   }
 `;
