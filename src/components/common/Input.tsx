@@ -67,6 +67,7 @@ const Wrapper = styled.div`
 
 const StyledLabel = styled.label`
   cursor: pointer;
+  text-align: left;
 `;
 
 const InputContainer = styled.div`
