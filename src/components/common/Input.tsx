@@ -9,6 +9,11 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
 }
 
+interface IStyledInputProps extends Pick<IProps, "error"> {
+  withIcon?: boolean;
+  hasError?: boolean;
+}
+
 export const Input = ({ label, error, type = "text", ...rest }: IProps) => {
   const inputId = React.useId();
   const isPassword = type === "password";
@@ -70,7 +75,7 @@ const InputContainer = styled.div`
   align-items: center;
 `;
 
-const StyledInput = styled.input<{ hasError?: boolean; withIcon?: boolean }>`
+const StyledInput = styled.input<IStyledInputProps>`
   width: 100%;
   padding: 12px ${({ withIcon }) => (withIcon ? "40px" : "16px")} 12px 16px;
   border-radius: 8px;
