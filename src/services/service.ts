@@ -43,6 +43,6 @@ export abstract class BaseService {
     path: string = "",
     options: { cache: boolean } = { cache: false }
   ): string {
-    return `/${this.prefix}${path}${options.cache && "?cache=true"}`;
+    return `/${this.prefix}${path}${options.cache ? "?cache=true" : ""}`;
   }
 }
