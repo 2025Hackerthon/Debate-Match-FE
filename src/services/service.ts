@@ -4,6 +4,7 @@ export enum ResultStatus {
   OK,
   BAD,
   INVALID,
+  UNAUTHORIZED,
   FORBIDDEN,
   NOTFOUND,
   ERROR
@@ -22,6 +23,8 @@ export abstract class BaseService {
     switch (error.response?.status) {
       case 400:
         return ResultStatus.BAD;
+      case 401:
+        return ResultStatus.UNAUTHORIZED;
       case 403:
         return ResultStatus.FORBIDDEN;
       case 404:
