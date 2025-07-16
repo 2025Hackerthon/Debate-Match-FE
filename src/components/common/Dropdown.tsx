@@ -102,6 +102,8 @@ const Selected = styled.div`
 const Menu = styled.ul<{ dropUp: boolean }>`
   position: absolute;
   width: 100%;
+  max-height: 240px;
+  overflow-y: auto;
   border-radius: 8px;
   background-color: white;
   border: 1px solid ${({ theme }) => theme.colors.gray[200]};
