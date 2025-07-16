@@ -12,6 +12,7 @@ import type {
   DebateCreateResponse,
   GetWaitResponse,
   GetDoneResponse,
+  GetMyAllResponse,
   GetDoneAllResponse
 } from "./types";
 
@@ -111,6 +112,22 @@ export class DebateService extends BaseService {
       const params = new URLSearchParams({ id });
       const res: AxiosResponse<GetDoneResponse> = await instance.get(
         this.getEndpoint(`/done?${params}`, { cache: true })
+      );
+      return this.success(res.data);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const status = this.handleAxiosError(axiosError);
+      return this.failure(status, axiosError.message);
+    }
+  }
+
+  /**
+   * 내 토론 목록 조회
+   */
+  async getMyAll(): Promise<Result<GetMyAllResponse>> {
+    try {
+      const res: AxiosResponse<GetMyAllResponse> = await instance.get(
+        this.getEndpoint("/my-debate", { cache: true })
       );
       return this.success(res.data);
     } catch (error) {
