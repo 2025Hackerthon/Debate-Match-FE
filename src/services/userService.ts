@@ -55,7 +55,7 @@ export class UserService extends BaseService {
   async info(): Promise<Result<UserInfoResponse>> {
     try {
       const res: AxiosResponse<UserInfoResponse> = await instance.get(
-        this.getEndpoint("/info")
+        this.getEndpoint("/info", { cache: true })
       );
       return this.success(res.data);
     } catch (error) {
