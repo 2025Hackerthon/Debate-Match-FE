@@ -1,12 +1,11 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
-import { Text } from "../components/common/Text";
 import { useTheme } from "@emotion/react";
 import type { DEBATETheme } from "../styles/theme";
-import { Dropdown } from "../components/common/Dropdown";
 import { useModal } from "../hooks/useModal";
 import { AccountDeleteModal } from "../components/modal/AccountDeleteModal";
 import { Record } from "../components/debate/Record";
+import { Text, Dropdown } from "../components/common/index";
 
 interface DummyType {
   question: string;

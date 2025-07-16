@@ -1,11 +1,9 @@
 import styled from "@emotion/styled";
-import { Input } from "../components/common/Input";
-import { Button } from "../components/common/Button";
-import { Text } from "../components/common/Text";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import type { DEBATETheme } from "../styles/theme";
+import { Input, Button, Text } from "../components/common/index";
 
 export const Login = () => {
   const navigate = useNavigate();

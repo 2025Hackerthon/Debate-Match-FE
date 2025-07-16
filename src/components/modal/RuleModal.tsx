@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { Modal } from "../common/Modal";
 import styled from "@emotion/styled";
-import { Text } from "../common/Text";
 import { useTheme } from "@emotion/react";
 import type { DEBATETheme } from "../../styles/theme";
-import { Button } from "../common/Button";
+import { Modal, Text, Button } from "../common/index";
 
 interface IProps {
   isOpen: boolean;

@@ -5,8 +5,7 @@ import Logo from "../assets/Logo.png";
 import { Text } from "../components/common/Text";
 import type { DEBATETheme } from "../styles/theme";
 import { useState } from "react";
-import { TagSelector } from "../components/debate/TagSelector";
-import { Record } from "../components/debate/Record";
+import { TagSelector, Record } from "../components/debate/index";
 
 interface DummyType {
   question: string;

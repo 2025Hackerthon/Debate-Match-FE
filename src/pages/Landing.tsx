@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
-import { Button } from "../components/common/Button";
 import { theme } from "../styles/theme";
 import { FaUserFriends, FaComments, FaTrophy, FaBook } from "react-icons/fa";
-import { Text } from "../components/common/Text";
 import { useNavigate } from "react-router-dom";
+import { Button, Text } from "../components/common/index";
 
 export const Landing = () => {
   const navigate = useNavigate();
