@@ -4,10 +4,15 @@ import { Button } from "../common/Button";
 interface IProps {
   title: string;
   tags: string[];
-  stance: "찬성" | "반대";
+  side: "PRO" | "CON";
 }
 
-export const DebateItem = ({ title, tags, stance }: IProps) => {
+export const DebateItem = ({ title, tags, side }: IProps) => {
+  const sideLabel = {
+    PRO: "찬성",
+    CON: "반대"
+  }[side];
+
   return (
     <DebateItemWrapper>
       <div>
@@ -20,7 +25,7 @@ export const DebateItem = ({ title, tags, stance }: IProps) => {
       </div>
 
       <ButtonWrapper>
-        <Button>{stance}</Button>
+        <Button>{sideLabel}</Button>
       </ButtonWrapper>
     </DebateItemWrapper>
   );

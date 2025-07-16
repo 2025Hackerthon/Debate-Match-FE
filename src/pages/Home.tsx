@@ -1,59 +1,31 @@
-/** @jsxImportSource @emotion/react */
 import styled from "@emotion/styled";
 import { useTheme } from "@emotion/react";
 import Logo from "../assets/Logo.png";
 import { Text } from "../components/common/Text";
 import type { DEBATETheme } from "../styles/theme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DebateItem, TagSelector } from "../components/debate/index";
-
-interface DummyType {
-  question: string;
-  tags: string[];
-  stance: "찬성" | "반대";
-}
-
-const debateItems: DummyType[] = [
-  {
-    question: "고전문학은 현재 교육 과정에 꼭 필요한가?",
-    tags: ["국어"],
-    stance: "찬성"
-  },
-  {
-    question: "수포자 문제 해결을 위한 수학 교육 개편이 필요한가?",
-    tags: ["수학"],
-    stance: "찬성"
-  },
-  {
-    question: "기초 영어 회화 수업이 시험보다 중요한가?",
-    tags: ["영어"],
-    stance: "반대"
-  },
-  {
-    question: "한국사 필수화는 과도한가?",
-    tags: ["한국사"],
-    stance: "반대"
-  },
-  {
-    question: "세계사 교육에서 식민 지배 서술을 확대해야 하는가?",
-    tags: ["세계사"],
-    stance: "찬성"
-  },
-  {
-    question: "기후위기 대응을 위한 탄소세 도입은 정당한가?",
-    tags: ["과학", "사회"],
-    stance: "찬성"
-  },
-  {
-    question: "예체능도 대학입시에 더 반영되어야 하는가?",
-    tags: ["체육", "음악", "미술"],
-    stance: "찬성"
-  }
-];
+import { debateService } from "../services";
+import { ResultStatus } from "../services/service";
+import type { GetWaitResponse } from "../services/types";
 
 export const Home = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [debateItems, setDebateItems] = useState<GetWaitResponse>([]);
   const theme = useTheme() as DEBATETheme;
+
+  const fetchDebateItems = async () => {
+    const res = await debateService.getWait();
+    if (res.status === ResultStatus.OK) {
+      setDebateItems(res.data!);
+    } else {
+      alert("오류가 발생했습니다");
+    }
+  };
+
+  useEffect(() => {
+    fetchDebateItems();
+  }, []);
 
   const filteredItems =
     selectedTags.length === 0
@@ -90,9 +62,9 @@ export const Home = () => {
           {filteredItems.map((item, idx) => (
             <DebateItem
               key={idx}
-              title={item.question}
+              title={item.title}
               tags={item.tags}
-              stance={item.stance}
+              side={item.side}
             />
           ))}
         </DebateList>
