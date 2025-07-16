@@ -7,6 +7,7 @@ export enum ResultStatus {
   UNAUTHORIZED,
   FORBIDDEN,
   NOTFOUND,
+  CONFLICT,
   ERROR
 }
 
@@ -29,6 +30,8 @@ export abstract class BaseService {
         return ResultStatus.FORBIDDEN;
       case 404:
         return ResultStatus.NOTFOUND;
+      case 408:
+        return ResultStatus.CONFLICT;
       default:
         return ResultStatus.ERROR;
     }
