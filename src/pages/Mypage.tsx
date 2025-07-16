@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useTheme } from "@emotion/react";
 import type { DEBATETheme } from "../styles/theme";
@@ -6,59 +6,60 @@ import { useModal } from "../hooks/useModal";
 import { AccountDeleteModal } from "../components/modal/AccountDeleteModal";
 import { Record } from "../components/debate/Record";
 import { Text, Dropdown } from "../components/common/index";
+import type { GetMyAllResponse } from "../services/types";
+import { debateService, userService } from "../services";
+import { ResultStatus } from "../services/service";
 
-interface DummyType {
-  question: string;
-  tags: string[];
-  agree: number;
-  disagree: number;
-  stance: "찬성" | "반대";
-}
+type EducationLevelLabel =
+  | "없음"
+  | "초등학교 졸업"
+  | "중학교 졸업"
+  | "고등학교 졸업"
+  | "대학교 졸업"
+  | "대학원 졸업";
 
-const debateItems: DummyType[] = [
-  {
-    question: "고전문학은 현재 교육 과정에 꼭 필요한가?",
-    tags: ["국어"],
-    agree: 72,
-    disagree: 19,
-    stance: "찬성"
-  },
-  {
-    question: "한국사 필수화는 과도한가?",
-    tags: ["한국사"],
-    agree: 22,
-    disagree: 83,
-    stance: "찬성"
-  },
-  {
-    question: "세계사 교육에서 식민 지배 서술을 확대해야 하는가?",
-    tags: ["세계사"],
-    agree: 81,
-    disagree: 15,
-    stance: "찬성"
-  },
-  {
-    question: "기후위기 대응을 위한 탄소세 도입은 정당한가?",
-    tags: ["과학", "사회"],
-    agree: 66,
-    disagree: 28,
-    stance: "반대"
-  }
-];
+const educationLevelMap = {
+  "없음": "NONE",
+  "초등학교 졸업": "ELEMENTARY_SCHOOL",
+  "중학교 졸업": "MIDDLE_SCHOOL",
+  "고등학교 졸업": "HIGH_SCHOOL",
+  "대학교 졸업": "UNIVERSITY",
+  "대학원 졸업": "GRADUATE_SCHOOL"
+} as const;
 
 export const Mypage = () => {
-  const [grade, setGrade] = useState("중학교 졸업");
+  const [grade, setGrade] = useState<EducationLevelLabel>("없음");
+  const [debateItems, setDebateItems] = useState<GetMyAllResponse>([]);
   const theme = useTheme() as DEBATETheme;
   const { isOpen, openModal, closeModal } = useModal();
 
-  const options = [
-    "없음",
-    "초등학교 졸업",
-    "중학교 졸업",
-    "고등학교 졸업",
-    "대학교 졸업",
-    "대학원 졸업"
-  ];
+  const options = Object.keys(educationLevelMap);
+
+  const fetchDebateItems = useCallback(async () => {
+    const res = await debateService.getMyAll();
+    if (res.status === ResultStatus.OK) {
+      setDebateItems(res.data!);
+    } else {
+      alert("오류가 발생했습니다");
+    }
+  }, []);
+
+  const fetchUserInfo = useCallback(async () => {
+    const res = await userService.info();
+    if (res.status === ResultStatus.OK) {
+      const grade = Object.entries(educationLevelMap).find(
+        ([, value]) => value === res.data!.educationLevel
+      )?.[0];
+      setGrade(grade as EducationLevelLabel);
+    } else {
+      alert("오류가 발생했습니다");
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchDebateItems();
+    fetchUserInfo();
+  }, [fetchDebateItems, fetchUserInfo]);
 
   return (
     <>
@@ -80,7 +81,7 @@ export const Mypage = () => {
                 <Dropdown
                   options={options}
                   value={grade}
-                  onChange={setGrade}
+                  onChange={value => setGrade(value as EducationLevelLabel)}
                   placeholder="학력을 선택해주세요"
                 />
               </DropdownWrapper>
@@ -104,11 +105,11 @@ export const Mypage = () => {
               <Record
                 key={idx}
                 type="mine"
-                title={item.question}
+                title={item.title}
                 tags={item.tags}
-                agree={item.agree}
-                disagree={item.disagree}
-                stance={item.stance}
+                agree={item.pro}
+                disagree={item.con}
+                side={item.side}
               />
             ))}
           </div>

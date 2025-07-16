@@ -9,7 +9,7 @@ interface IProps {
   agree: number;
   disagree: number;
   type?: "open" | "mine";
-  stance?: "찬성" | "반대";
+  side?: "PRO" | "CON";
 }
 
 export const Record = ({
@@ -18,16 +18,20 @@ export const Record = ({
   agree,
   disagree,
   type = "open",
-  stance
+  side
 }: IProps) => {
   const theme = useTheme() as DEBATETheme;
+  const sideLabel = {
+    PRO: "찬성",
+    CON: "반대"
+  }[side ?? "PRO"];
 
   return (
     <DebateItemWrapper>
       <div>
         <TitleWrapper>
           <Question>{title}</Question>
-          {type == "mine" && <Stance>{stance}</Stance>}
+          {type == "mine" && <Stance>{sideLabel}</Stance>}
         </TitleWrapper>
         <TagList>
           {tags.map(tag => (
