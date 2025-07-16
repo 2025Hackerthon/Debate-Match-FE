@@ -6,8 +6,8 @@ import type { DEBATETheme } from "../../styles/theme";
 interface IProps {
   title: string;
   tags: string[];
-  agree: number;
-  disagree: number;
+  pro: number;
+  con: number;
   type?: "open" | "mine";
   side?: "PRO" | "CON";
 }
@@ -15,8 +15,8 @@ interface IProps {
 export const Record = ({
   title,
   tags,
-  agree,
-  disagree,
+  pro: agree,
+  con: disagree,
   type = "open",
   side
 }: IProps) => {

@@ -107,8 +107,8 @@ export const Mypage = () => {
                 type="mine"
                 title={item.title}
                 tags={item.tags}
-                agree={item.pro}
-                disagree={item.con}
+                pro={item.pro}
+                con={item.con}
                 side={item.side}
               />
             ))}
