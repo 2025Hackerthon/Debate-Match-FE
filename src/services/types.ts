@@ -39,7 +39,7 @@ export type DebateCreateResponse = string;
 export type GetWaitResponse = DebateQueryResponse[];
 export type GetDoneResponse = DebateDoneQueryResponse;
 export type GetDoneAllResponse = DebateDoneQueryAllResponse[];
-export type GetMyAllResponse = DebateDoneQueryAllResponse[];
+export type GetMyAllResponse = DebateMyQueryAllResponse[];
 export type NextLevelEventData = [Argument, Argument];
 
 export interface UserSignUpRequest {
@@ -119,4 +119,8 @@ export interface DebateDoneQueryAllResponse {
   tags: Tag[];
   con: number;
   pro: number;
+}
+
+export interface DebateMyQueryAllResponse extends DebateDoneQueryAllResponse {
+  side: Side;
 }
