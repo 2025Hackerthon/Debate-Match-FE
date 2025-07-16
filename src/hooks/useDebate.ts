@@ -30,10 +30,10 @@ const rebuttal: DebateState = {
 
 const defence: DebateState = {
   level: "DEFENSE",
-  handleNext: set => set(conclution)
+  handleNext: set => set(conclusion)
 };
 
-const conclution: DebateState = {
+const conclusion: DebateState = {
   level: "CONCLUSION",
   handleNext: () => {}
 };
