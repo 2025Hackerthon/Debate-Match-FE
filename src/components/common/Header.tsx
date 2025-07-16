@@ -5,9 +5,6 @@ import Logo from "../../assets/Logo.png";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../../hooks/useModal";
 import { CreateDebateModal } from "../modal/CreateDebateModal";
-import { WaitingModal } from "../modal/WaitingModal";
-import { RuleModal } from "../modal/RuleModal";
-import { AccountDeleteModal } from "../modal/AccountDeleteModal";
 
 interface IProps {
   isLoggedIn: boolean;
@@ -36,10 +33,7 @@ export const Header = ({ isLoggedIn, username }: IProps) => {
 
   return (
     <>
-      {/* 모달 테스트 하던 것들 */}
       <CreateDebateModal isOpen={isOpen} onClose={closeModal} />
-      {/* <WaitingModal isOpen={isOpen} onClose={closeModal} /> */}
-      {/* <RuleModal isOpen={isOpen} onClose={closeModal} /> */}
       <Container>
         <Left>
           <LogoWrapper onClick={onMain}>

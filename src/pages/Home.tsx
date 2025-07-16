@@ -4,9 +4,8 @@ import { useTheme } from "@emotion/react";
 import Logo from "../assets/Logo.png";
 import { Text } from "../components/common/Text";
 import type { DEBATETheme } from "../styles/theme";
-import { DebateItem } from "../components/debate/DebateItem";
 import { useState } from "react";
-import { TagSelector } from "../components/debate/TagSelector";
+import { DebateItem, TagSelector } from "../components/debate/index";
 
 interface DummyType {
   question: string;
