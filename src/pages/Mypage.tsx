@@ -105,6 +105,7 @@ export const Mypage = () => {
               <Record
                 key={idx}
                 type="mine"
+                id={item.debateId}
                 title={item.title}
                 tags={item.tags}
                 pro={item.pro}

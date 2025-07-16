@@ -2,8 +2,10 @@ import styled from "@emotion/styled";
 import { Text } from "../common/Text";
 import { useTheme } from "@emotion/react";
 import type { DEBATETheme } from "../../styles/theme";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
+  id: string;
   title: string;
   tags: string[];
   pro: number;
@@ -13,6 +15,7 @@ interface IProps {
 }
 
 export const Record = ({
+  id,
   title,
   tags,
   pro: agree,
@@ -20,6 +23,7 @@ export const Record = ({
   type = "open",
   side
 }: IProps) => {
+  const navigate = useNavigate();
   const theme = useTheme() as DEBATETheme;
   const sideLabel = {
     PRO: "찬성",
@@ -27,7 +31,7 @@ export const Record = ({
   }[side ?? "PRO"];
 
   return (
-    <DebateItemWrapper>
+    <DebateItemWrapper onClick={() => navigate(`/result/${id}`)}>
       <div>
         <TitleWrapper>
           <Question>{title}</Question>

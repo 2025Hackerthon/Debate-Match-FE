@@ -68,6 +68,7 @@ export const Records = () => {
             {filteredItems.map((item, idx) => (
               <Record
                 key={idx}
+                id={item.debateId}
                 title={item.title}
                 tags={item.tags}
                 pro={item.pro}
