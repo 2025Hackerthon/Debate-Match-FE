@@ -31,7 +31,6 @@ export const Button = ({
       variant={variant}
       font={font}
       disabled={disabled}
-      $disabled={disabled}
       {...rest}
     >
       {children}
@@ -39,7 +38,6 @@ export const Button = ({
   );
 };
 
-// 사이즈별 패딩
 const sizePadding = {
   small: "5px 8px",
   large: "10px 8px"
@@ -53,7 +51,7 @@ const StyledButton = styled.button<{
     lineHeight: string;
     weight: string;
   };
-  $disabled: boolean;
+  disabled: boolean;
 }>`
   width: 100%;
   display: inline-flex;
@@ -66,30 +64,30 @@ const StyledButton = styled.button<{
   font-weight: ${({ font }) => font.weight};
   border: none;
   transition: background-color 0.2s;
-  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 
-  ${({ variant, theme, $disabled }) => {
+  ${({ variant, theme, disabled }) => {
     const styles = {
       blue: `
         background-color: ${theme.colors.blue[400]};
         color: ${theme.colors.sub.normal[10]};
-        ${!$disabled ? `&:hover { background-color: ${theme.colors.blue[500]}; }` : ""}
+        ${!disabled ? `&:hover { background-color: ${theme.colors.blue[500]}; }` : ""}
       `,
       gray: `
         background-color: ${theme.colors.gray[100]};
         color: ${theme.colors.sub.normal[20]};
-        ${!$disabled ? `&:hover { background-color: ${theme.colors.gray[200]}; }` : ""}
+        ${!disabled ? `&:hover { background-color: ${theme.colors.gray[200]}; }` : ""}
       `,
       white: `
         background-color: ${theme.colors.sub.normal[10]};
         color: ${theme.colors.sub.normal[20]};
-        ${!$disabled ? `&:hover { background-color: ${theme.colors.gray[100]}; }` : ""}
+        ${!disabled ? `&:hover { background-color: ${theme.colors.gray[100]}; }` : ""}
       `,
       red: `
         background-color: ${theme.colors.sub.error[10]};
         color: ${theme.colors.sub.error[20]};
-        ${!$disabled ? `&:hover { background-color: #ebd4c6; }` : ""}
+        ${!disabled ? `&:hover { background-color: #ebd4c6; }` : ""}
       `
     };
 
