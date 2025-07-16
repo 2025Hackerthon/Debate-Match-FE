@@ -3,52 +3,35 @@ import { useTheme } from "@emotion/react";
 import type { DEBATETheme } from "../styles/theme";
 import { Opinion } from "../components/debate/Opinion";
 import { AiFeedback } from "../components/debate/AiFeedback";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Text, Button } from "../components/common/index";
-
-const dummyArguments = [
-  {
-    title: "찬성측 입론",
-    content:
-      "AI는 방대한 데이터를 빠르게 분석하고 학습자의 수준에 맞는 맞춤형 교육을 제공할 수 있습니다. 이는 교사 1명이 모든 학생을 개별적으로 지도하기 어려운 상황에서 매우 유용한 대안이 될 수 있습니다."
-  },
-  {
-    title: "반대측 입론",
-    content:
-      "AI는 감정과 공감을 기반으로 한 소통 능력이 부족하기 때문에 학생들의 정서적 성장과 인간적인 상호작용이 중요한 교육현장에서 교사를 완전히 대체할 수 없습니다."
-  },
-  {
-    title: "찬성측 변론",
-    content:
-      "AI는 학습 데이터 분석을 통해 각 학생의 취약점을 실시간으로 파악하고, 필요한 부분을 보완할 수 있어 교육 효율을 높입니다."
-  },
-  {
-    title: "반대측 변론",
-    content:
-      "AI는 윤리적 문제와 오작동의 가능성이 있으며, 기술 의존도가 높아질수록 교육의 본질이 훼손될 우려가 있습니다."
-  },
-  {
-    title: "찬성측 입론",
-    content:
-      "농촌이나 낙후 지역에서 교사 수급이 어려운 상황에서 AI는 교육격차 해소에 기여할 수 있습니다."
-  },
-  {
-    title: "반대측 입론",
-    content:
-      "교사는 단순히 지식을 전달하는 존재가 아니라, 학생과의 관계 속에서 인성과 태도를 길러주는 역할도 수행합니다. AI는 이 역할을 대신할 수 없습니다."
-  }
-];
-
-const feedback = {
-  short:
-    "아니 무너가 짱이라는 입장과 그냥 무너보단 오징어 데쳐서 초장 찍어먹는게 짱인 파",
-  //   feedback: "개인적으로 무너가 짱이라고 생각함 ㄱㅇㅇ"
-  feedback: undefined
-};
+import { useCallback, useEffect, useState } from "react";
+import { debateService } from "../services";
+import { ResultStatus } from "../services/service";
+import type { DebateDoneQueryResponse } from "../services/types";
 
 export const Result = () => {
+  const [result, setResult] = useState<DebateDoneQueryResponse | undefined>(
+    undefined
+  );
   const theme = useTheme() as DEBATETheme;
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  if (!id) navigate(-1);
+
+  const fetchResult = useCallback(async () => {
+    const res = await debateService.getDone(id!);
+    if (res.status === ResultStatus.OK) {
+      setResult(res.data!);
+    } else {
+      alert("오류가 발생했습니다");
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchResult();
+  }, [fetchResult]);
 
   return (
     <>
@@ -64,10 +47,10 @@ export const Result = () => {
 
         <ContentArea>
           <OpinionWrapper>
-            {dummyArguments.map((v, i) => {
+            {result?.data.map((v, i) => {
               return (
                 <>
-                  <Opinion title={v.title} content={v.content} index={i} />
+                  <Opinion title={v.level} content={v.content} index={i} />
                 </>
               );
             })}
@@ -75,7 +58,10 @@ export const Result = () => {
         </ContentArea>
 
         <FeedbackWrapper>
-          <AiFeedback short={feedback.short} feedback={feedback.feedback} />
+          <AiFeedback
+            short={result?.summary ?? ""}
+            feedback={result?.feedback}
+          />
         </FeedbackWrapper>
 
         <BottomRow>
@@ -84,7 +70,7 @@ export const Result = () => {
           </Text>
 
           <ButtonWrapper>
-            {feedback.feedback ? (
+            {result?.feedback ? (
               <Button
                 size="large"
                 variant="blue"
