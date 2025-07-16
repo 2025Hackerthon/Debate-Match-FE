@@ -3,6 +3,8 @@ import { theme } from "../styles/theme";
 import { FaUserFriends, FaComments, FaTrophy, FaBook } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Button, Text } from "../components/common/index";
+import { useEffect, useCallback } from "react";
+import { userService } from "../services";
 
 export const Landing = () => {
   const navigate = useNavigate();
@@ -10,6 +12,15 @@ export const Landing = () => {
   const onLogin = () => {
     navigate("/login");
   };
+
+  const checkLoggedIn = useCallback(async () => {
+    const res = await userService.info();
+    if (res.data) navigate("/home");
+  }, [navigate]);
+
+  useEffect(() => {
+    checkLoggedIn();
+  }, [checkLoggedIn]);
 
   return (
     <Wrapper>
