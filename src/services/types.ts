@@ -1,4 +1,4 @@
-type EducationLevel =
+export type EducationLevel =
   | "ELEMENTARY_SCHOOL"
   | "MIDDLE_SCHOOL"
   | "HIGH_SCHOOL"
@@ -6,7 +6,7 @@ type EducationLevel =
   | "GRADUATE_SCHOOL"
   | "NONE";
 
-type Tag =
+export type Tag =
   | "국어"
   | "수학"
   | "영어"
@@ -23,9 +23,13 @@ type Tag =
   | "교양"
   | "IT";
 
-type Side = "PRO" | "CON";
+export type Side = "PRO" | "CON";
 
-type DebateLevel = "INTRODUCTION" | "REBUTTAL" | "DEFENSE" | "CONCLUSION";
+export type DebateLevel =
+  | "INTRODUCTION"
+  | "REBUTTAL"
+  | "DEFENSE"
+  | "CONCLUSION";
 
 export type UserSignUpResponse = string;
 export type UserLoginResponse = TokenResponse;
