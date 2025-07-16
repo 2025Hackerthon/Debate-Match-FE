@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 
-enum ResultStatus {
+export enum ResultStatus {
   OK,
   BAD,
   INVALID,
