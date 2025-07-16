@@ -41,7 +41,7 @@ export abstract class BaseService {
 
   protected getEndpoint(
     path: string = "",
-    options: { cache: boolean } = { cache: true }
+    options: { cache: boolean } = { cache: false }
   ): string {
     return `/${this.prefix}${path}${options.cache && "?cache=true"}`;
   }
