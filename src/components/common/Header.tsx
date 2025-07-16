@@ -37,9 +37,9 @@ export const Header = ({ isLoggedIn, username }: IProps) => {
   return (
     <>
       {/* 모달 테스트 하던 것들 */}
-      <CreateDebateModal isOpen={isOpen} onClose={closeModal} />
+      {/* <CreateDebateModal isOpen={isOpen} onClose={closeModal} /> */}
       {/* <WaitingModal isOpen={isOpen} onClose={closeModal} /> */}
-      {/* <RuleModal isOpen={isOpen} onClose={closeModal} /> */}
+      <RuleModal isOpen={isOpen} onClose={closeModal} />
       {/* <AccountDeleteModal isOpen={isOpen} onClose={closeModal} /> */}
       <Container>
         <Left>
