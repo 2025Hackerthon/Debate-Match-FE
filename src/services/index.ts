@@ -3,14 +3,7 @@ import { ReactionService } from "./reactionService";
 import { SseService } from "./sseService";
 import { UserService } from "./userService";
 
-const debateService = new DebateService();
-const reactionService = new ReactionService();
-const sseService = new SseService();
-const userService = new UserService();
-
-export const services = {
-  debateService,
-  reactionService,
-  sseService,
-  userService
-};
+export const debateService = new DebateService();
+export const reactionService = new ReactionService();
+export const sseService = new SseService();
+export const userService = new UserService();
