@@ -4,16 +4,28 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import type { DEBATETheme } from "../styles/theme";
 import { Input, Button, Text } from "../components/common/index";
+import { userService } from "../services";
+import { ResultStatus } from "../services/service";
 
 export const Login = () => {
   const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const [isBusy, setIsBusy] = useState(false);
 
   const theme = useTheme() as DEBATETheme;
 
-  const handleLogin = () => {
-    // 로그인 처리 로직
+  const handleLogin = async () => {
+    setIsBusy(true);
+    const res = await userService.login({ accountId: id, password });
+    if (res.status === ResultStatus.NOTFOUND) {
+      alert("없는 유저입니다");
+    } else if (res.status === ResultStatus.UNAUTHORIZED) {
+      alert("비밀번호가 틀렸습니다");
+    } else if (res.status === ResultStatus.OK) {
+      navigate("/home");
+    }
+    setIsBusy(false);
   };
 
   const handleSignup = () => {
@@ -48,7 +60,12 @@ export const Login = () => {
           </div>
 
           <ButtonWrapper>
-            <Button variant="blue" size="large" onClick={handleLogin}>
+            <Button
+              disabled={!id || !password || isBusy}
+              variant="blue"
+              size="large"
+              onClick={handleLogin}
+            >
               로그인
             </Button>
             <BottomText>
