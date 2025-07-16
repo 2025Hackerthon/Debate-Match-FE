@@ -99,7 +99,7 @@ const SelectedTagList = styled.div`
   flex-wrap: wrap;
 `;
 
-const Tag = styled.div<{ theme: any }>`
+const Tag = styled.div`
   background-color: ${({ theme }) => theme.colors.blue[800]};
   color: ${({ theme }) => theme.colors.sub.normal[10]};
   padding: 6px 12px;
