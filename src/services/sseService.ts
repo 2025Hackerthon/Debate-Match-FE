@@ -1,8 +1,7 @@
-import type { AxiosError, AxiosResponse } from "axios";
+import type { AxiosError } from "axios";
 import instance from "./instance";
 import { BaseService } from "./service";
 import type { Result } from "./service";
-import type { SseConnectResponse } from "./types";
 
 export class SseService extends BaseService {
   prefix = "sse";
@@ -13,13 +12,14 @@ export class SseService extends BaseService {
   async connect(
     debateId: string,
     side: "PRO" | "CON"
-  ): Promise<Result<SseConnectResponse>> {
+  ): Promise<EventSource | Result> {
     try {
-      const params = new URLSearchParams({ debateId, side });
-      const res: AxiosResponse<SseConnectResponse> = await instance.get(
-        this.getEndpoint(`/connect?${params}`)
+      const url = this.getEndpoint(
+        `/connect?debateId=${debateId}&side=${side}`
       );
-      return this.success(res.data);
+      const eventSource = new EventSource(instance.defaults.baseURL + url);
+
+      return eventSource;
     } catch (error) {
       const axiosError = error as AxiosError;
       const status = this.handleAxiosError(axiosError);

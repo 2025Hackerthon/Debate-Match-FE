@@ -32,10 +32,10 @@ export type UserLoginResponse = TokenResponse;
 export type DebateUpdateResponse = string;
 export type DebateJoinResponse = string;
 export type DebateCreateResponse = string;
-export type SseConnectResponse = SseEmitter;
 export type GetWaitResponse = DebateQueryResponse[];
 export type GetDoneResponse = DebateDoneQueryResponse;
 export type GetDoneAllResponse = DebateDoneQueryAllResponse[];
+export type NextLevelEventData = [Argument, Argument];
 
 export interface UserSignUpRequest {
   accountId: string;
@@ -78,10 +78,6 @@ export interface DebateCreateRequest {
   tagList: Tag[];
   title: string;
   side: Side;
-}
-
-export interface SseEmitter {
-  timeout?: number;
 }
 
 export interface DebateQueryResponse {
