@@ -23,7 +23,7 @@ function App() {
         <GlobalStyle />
         <BrowserRouter>
           <ScrollToTop />
-          <Header isLoggedIn={true} username="sjy08" />
+          <Header />
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
