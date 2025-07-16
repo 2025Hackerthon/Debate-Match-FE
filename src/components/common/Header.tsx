@@ -5,15 +5,24 @@ import Logo from "../../assets/Logo.png";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../../hooks/useModal";
 import { CreateDebateModal } from "../modal/CreateDebateModal";
+import { useState, useEffect } from "react";
+import { userService } from "../../services";
 
-interface IProps {
-  isLoggedIn: boolean;
-  username?: string;
-}
-
-export const Header = ({ isLoggedIn, username }: IProps) => {
+export const Header = () => {
+  const [username, setUsername] = useState<string | undefined>(undefined);
   const { isOpen, openModal, closeModal } = useModal();
   const navigate = useNavigate();
+
+  const fetchUserInfo = async () => {
+    const res = await userService.info();
+    setUsername(res.data?.username);
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const isLoggedIn = !!username;
 
   const onMain = () => {
     navigate(isLoggedIn ? "/home" : "/");
