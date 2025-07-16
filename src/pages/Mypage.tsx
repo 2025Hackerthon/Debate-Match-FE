@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
-import { FiEdit2 } from "react-icons/fi";
 import { Text } from "../components/common/Text";
 import { useTheme } from "@emotion/react";
 import type { DEBATETheme } from "../styles/theme";
@@ -151,27 +150,9 @@ const InfoRow = styled.div`
   gap: 12px;
 `;
 
-const Label = styled.div`
-  font-size: 16px;
-  color: #555;
-`;
-
 const UserId = styled.div`
   font-size: 28px;
   font-weight: bold;
-`;
-
-const EditableField = styled.div`
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-`;
-
-const EditIcon = styled(FiEdit2)`
-  font-size: 16px;
-  color: #555;
-  cursor: pointer;
 `;
 
 const RightSection = styled.div`
