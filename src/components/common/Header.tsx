@@ -31,16 +31,15 @@ export const Header = ({ isLoggedIn, username }: IProps) => {
     navigate("/records");
   };
   const onMyPage = () => {
-    // 마이페이지로 이동
+    navigate("/mypage");
   };
 
   return (
     <>
       {/* 모달 테스트 하던 것들 */}
-      {/* <CreateDebateModal isOpen={isOpen} onClose={closeModal} /> */}
+      <CreateDebateModal isOpen={isOpen} onClose={closeModal} />
       {/* <WaitingModal isOpen={isOpen} onClose={closeModal} /> */}
-      <RuleModal isOpen={isOpen} onClose={closeModal} />
-      {/* <AccountDeleteModal isOpen={isOpen} onClose={closeModal} /> */}
+      {/* <RuleModal isOpen={isOpen} onClose={closeModal} /> */}
       <Container>
         <Left>
           <LogoWrapper onClick={onMain}>
