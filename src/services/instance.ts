@@ -29,17 +29,17 @@ const generateCacheKey = (
   return `${baseKey}_${paramsString}_${dataString}`;
 };
 
-const getCachedData = <T>(key: string): T | null => {
-  const entry = cache.get(key);
-  if (!entry) return null;
+// const getCachedData = <T>(key: string): T | null => {
+//   const entry = cache.get(key);
+//   if (!entry) return null;
 
-  if (Date.now() > entry.expiry) {
-    cache.delete(key);
-    return null;
-  }
+//   if (Date.now() > entry.expiry) {
+//     cache.delete(key);
+//     return null;
+//   }
 
-  return entry.data as T;
-};
+//   return entry.data as T;
+// };
 
 const setCachedData = (key: string, data: unknown): void => {
   const entry: CacheEntry = {
@@ -63,26 +63,26 @@ instance.interceptors.request.use(
     const token = getToken();
     if (token) config.headers["Authorization"] = `Bearer ${token}`;
 
-    if (config.method === "get" && shouldCache(config.url ?? "")) {
-      const cacheKey = generateCacheKey(
-        config.url ?? "",
-        config.method || "get",
-        config.params,
-        config.data
-      );
-      const cachedData = getCachedData(cacheKey);
+    // if (config.method === "get" && shouldCache(config.url ?? "")) {
+    //   const cacheKey = generateCacheKey(
+    //     config.url ?? "",
+    //     config.method || "get",
+    //     config.params,
+    //     config.data
+    //   );
+    //   const cachedData = getCachedData(cacheKey);
 
-      if (cachedData) {
-        return Promise.reject({
-          isCache: true,
-          data: cachedData,
-          status: 200,
-          statusText: "OK",
-          headers: "",
-          config
-        });
-      }
-    }
+    //   if (cachedData) {
+    //     return Promise.reject({
+    //       isCache: true,
+    //       data: cachedData,
+    //       status: 200,
+    //       statusText: "OK",
+    //       headers: "",
+    //       config
+    //     });
+    //   }
+    // }
 
     return config;
   },
@@ -104,15 +104,15 @@ instance.interceptors.response.use(
     return res;
   },
   async err => {
-    if (err.isCache) {
-      return Promise.resolve({
-        data: err.data,
-        status: err.status,
-        statusText: err.statusText,
-        headers: err.headers,
-        config: err.config
-      });
-    }
+    // if (err.isCache) {
+    //   return Promise.resolve({
+    //     data: err.data,
+    //     status: err.status,
+    //     statusText: err.statusText,
+    //     headers: err.headers,
+    //     config: err.config
+    //   });
+    // }
 
     if (err.response?.status === 401) {
       location.href = "/";

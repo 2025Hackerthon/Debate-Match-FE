@@ -53,6 +53,15 @@ export interface UserLoginRequest {
   password: string;
 }
 
+export interface UserEditEducationLevelRequest {
+  educationLevel: EducationLevel;
+}
+
+export interface UserInfoResponse {
+  username: string;
+  educationLevel: EducationLevel;
+}
+
 export interface TokenResponse {
   accessToken: string;
 }

@@ -6,7 +6,9 @@ import type {
   UserSignUpRequest,
   UserSignUpResponse,
   UserLoginRequest,
-  UserLoginResponse
+  UserLoginResponse,
+  UserInfoResponse,
+  UserEditEducationLevelRequest
 } from "./types";
 
 export class UserService extends BaseService {
@@ -40,6 +42,36 @@ export class UserService extends BaseService {
       );
       saveToken(res.data.accessToken);
       return this.success(res.data);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const status = this.handleAxiosError(axiosError);
+      return this.failure(status, axiosError.message);
+    }
+  }
+
+  /**
+   * 유저 정보
+   */
+  async info(): Promise<Result<UserInfoResponse>> {
+    try {
+      const res: AxiosResponse<UserInfoResponse> = await instance.get(
+        this.getEndpoint("/info")
+      );
+      return this.success(res.data);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const status = this.handleAxiosError(axiosError);
+      return this.failure(status, axiosError.message);
+    }
+  }
+
+  /**
+   * 유저 학력 편집
+   */
+  async editEducationLevel(body: UserEditEducationLevelRequest) {
+    try {
+      await instance.patch(this.getEndpoint("/edit"), body);
+      return this.success();
     } catch (error) {
       const axiosError = error as AxiosError;
       const status = this.handleAxiosError(axiosError);
