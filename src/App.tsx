@@ -32,7 +32,7 @@ function App() {
             <Route path="/records" element={<Records />} />
             <Route path="/mypage" element={<Mypage />} />
             <Route path="/debate" element={<Debate />} />
-            <Route path="/result" element={<Result />} />
+            <Route path="/result/:id" element={<Result />} />
           </Routes>
           <Footer />
         </BrowserRouter>
