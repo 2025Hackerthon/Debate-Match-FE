@@ -4,30 +4,68 @@ import { useNavigate } from "react-router-dom";
 import type { DEBATETheme } from "../styles/theme";
 import { useTheme } from "@emotion/react";
 import { Input, Button, Dropdown, Text } from "../components/common/index";
+import { userService } from "../services";
+import { ResultStatus } from "../services/service";
+
+type EducationLevelLabel =
+  | "없음"
+  | "초등학교 졸업"
+  | "중학교 졸업"
+  | "고등학교 졸업"
+  | "대학교 졸업"
+  | "대학원 졸업";
 
 export const Signup = () => {
   const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [grade, setGrade] = useState("");
+  const [isBusy, setIsBusy] = useState(false);
+  const [isIdVerified, setIsIdVerified] = useState(false);
 
   const theme = useTheme() as DEBATETheme;
 
-  const options = [
-    "없음",
-    "초등학교 졸업",
-    "중학교 졸업",
-    "고등학교 졸업",
-    "대학교 졸업",
-    "대학원 졸업"
-  ];
+  const [grade, setGrade] = useState<EducationLevelLabel>("없음");
 
-  const handleCheckDuplicate = () => {
-    // 중복 체크 로직
+  const educationLevelMap = {
+    "없음": "NONE",
+    "초등학교 졸업": "ELEMENTARY_SCHOOL",
+    "중학교 졸업": "MIDDLE_SCHOOL",
+    "고등학교 졸업": "HIGH_SCHOOL",
+    "대학교 졸업": "UNIVERSITY",
+    "대학원 졸업": "GRADUATE_SCHOOL"
+  } as const;
+
+  const options = Object.keys(educationLevelMap);
+
+  const handleCheckDuplicate = async () => {
+    setIsBusy(true);
+    const res = await userService.checkId(id);
+    if (res.status === ResultStatus.CONFLICT) {
+      setIsIdVerified(false);
+      alert("이미 존재하는 아이디입니다");
+    } else if (res.status === ResultStatus.OK) {
+      setIsIdVerified(true);
+    }
+    setIsBusy(false);
   };
 
-  const handleSignup = () => {
-    // 회원가입 처리 로직
+  const handleSignup = async () => {
+    setIsBusy(true);
+    const res = await userService.signUp({
+      accountId: id,
+      password,
+      educationLevel: educationLevelMap[grade]
+    });
+    if (res.status === ResultStatus.NOTFOUND) {
+      alert("없는 유저입니다");
+    } else if (res.status === ResultStatus.UNAUTHORIZED) {
+      alert("비밀번호가 틀렸습니다");
+    } else if (res.status === ResultStatus.CONFLICT) {
+      alert("이미 존재하는 아이디입니다");
+    } else if (res.status === ResultStatus.OK) {
+      navigate("/login");
+    }
+    setIsBusy(false);
   };
 
   const handleLogin = () => {
@@ -53,6 +91,7 @@ export const Signup = () => {
                   placeholder="아이디를 입력해주세요"
                   value={id}
                   onChange={e => {
+                    setIsIdVerified(false);
                     setId(e.target.value);
                   }}
                 />
@@ -65,8 +104,12 @@ export const Signup = () => {
                   marginBottom: "16px"
                 }}
               >
-                <Button size="large" onClick={handleCheckDuplicate}>
-                  중복체크
+                <Button
+                  disabled={!id || isBusy || isIdVerified}
+                  size="large"
+                  onClick={handleCheckDuplicate}
+                >
+                  {isIdVerified ? "사용 가능" : "중복확인"}
                 </Button>
               </div>
             </IdWrapper>
@@ -86,14 +129,19 @@ export const Signup = () => {
               <Dropdown
                 options={options}
                 value={grade}
-                onChange={setGrade}
+                onChange={value => setGrade(value as EducationLevelLabel)}
                 placeholder="학력을 선택해주세요"
               />
             </DropdownWrapper>
           </div>
 
           <ButtonWrapper>
-            <Button variant="blue" size="large" onClick={handleSignup}>
+            <Button
+              disabled={!id || !password || isBusy || !isIdVerified}
+              variant="blue"
+              size="large"
+              onClick={handleSignup}
+            >
               회원가입
             </Button>
             <BottomText>
