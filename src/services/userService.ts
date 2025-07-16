@@ -40,6 +40,7 @@ export class UserService extends BaseService {
         this.getEndpoint("/login"),
         body
       );
+      removeToken();
       saveToken(res.data.accessToken);
       return this.success(res.data);
     } catch (error) {
@@ -57,6 +58,20 @@ export class UserService extends BaseService {
       const res: AxiosResponse<UserInfoResponse> = await instance.get(
         this.getEndpoint("/info", { cache: true })
       );
+      return this.success(res.data);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const status = this.handleAxiosError(axiosError);
+      return this.failure(status, axiosError.message);
+    }
+  }
+
+  /**
+   * 아이디 중복 체크
+   */
+  async checkId(id: string): Promise<Result> {
+    try {
+      const res = await instance.get(this.getEndpoint(`/check?id=${id}`));
       return this.success(res.data);
     } catch (error) {
       const axiosError = error as AxiosError;
