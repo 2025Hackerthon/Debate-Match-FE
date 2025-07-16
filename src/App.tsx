@@ -4,13 +4,17 @@ import { ThemeProvider } from "@emotion/react";
 import { theme } from "./styles/theme";
 import { Header } from "./components/common/Header";
 import { Footer } from "./components/common/Footer";
-import { Landing } from "./pages/Landing";
-import { Login } from "./pages/Login";
 import { ScrollToTop } from "./components/common/ScrollToTop";
-import { Signup } from "./pages/Signup";
-import { Home } from "./pages/Home";
-import { Records } from "./pages/Records";
-import { Mypage } from "./pages/Mypage";
+import {
+  Landing,
+  Login,
+  Signup,
+  Home,
+  Records,
+  Mypage,
+  Debate,
+  Result
+} from "./pages/index";
 
 function App() {
   return (
@@ -27,6 +31,8 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/records" element={<Records />} />
             <Route path="/mypage" element={<Mypage />} />
+            <Route path="/debate" element={<Debate />} />
+            <Route path="/result" element={<Result />} />
           </Routes>
           <Footer />
         </BrowserRouter>
