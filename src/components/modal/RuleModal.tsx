@@ -39,7 +39,7 @@ export const RuleModal = ({ isOpen, onClose }: IProps) => {
 
         <ButtonWrapper>
           <Button onClick={onClose} variant="blue" size="large">
-            준비 완료 (1/2)
+            준비 완료
           </Button>
         </ButtonWrapper>
       </Wrapper>

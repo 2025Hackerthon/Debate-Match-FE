@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Cookies } from "react-cookie";
 
 const BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
@@ -103,7 +103,7 @@ instance.interceptors.response.use(
 
     return res;
   },
-  async err => {
+  async (err: AxiosError) => {
     // if (err.isCache) {
     //   return Promise.resolve({
     //     data: err.data,
@@ -114,8 +114,15 @@ instance.interceptors.response.use(
     //   });
     // }
 
-    if (err.response?.status === 401) {
+    if (err.status === 401) {
       location.href = "/";
+    } else if (
+      err.status === 404 &&
+      JSON.stringify(err.response?.data).includes("User Not Found") &&
+      !window.location.href.includes("/login")
+    ) {
+      removeToken();
+      location.href = "/login";
     } else {
       return Promise.reject(err);
     }
@@ -150,6 +157,6 @@ export const getCacheStats = () => {
   };
 };
 
-export { saveToken, removeToken };
+export { saveToken, removeToken, getToken };
 
 export default instance;

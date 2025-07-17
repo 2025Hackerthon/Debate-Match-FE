@@ -5,12 +5,12 @@ import { Text } from "../components/common/Text";
 import type { DEBATETheme } from "../styles/theme";
 import { useEffect, useState } from "react";
 import { TagSelector, Record } from "../components/debate/index";
-import type { GetDoneAllResponse } from "../services/types";
+import { tagMap, type GetDoneAllResponse, type Tag } from "../services/types";
 import { debateService } from "../services";
 import { ResultStatus } from "../services/service";
 
 export const Records = () => {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [debateItems, setDebateItems] = useState<GetDoneAllResponse>([]);
   const theme = useTheme() as DEBATETheme;
 
@@ -31,7 +31,9 @@ export const Records = () => {
     selectedTags.length === 0
       ? debateItems
       : debateItems.filter(item =>
-          item.tags.some(tag => selectedTags.includes(tag))
+          item.tags.some(tag =>
+            selectedTags.map(value => tagMap[value]).includes(tag)
+          )
         );
 
   return (

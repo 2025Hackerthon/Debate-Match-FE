@@ -23,6 +23,41 @@ export type Tag =
   | "교양"
   | "IT";
 
+export type TagEnum =
+  | "KOREAN"
+  | "MATH"
+  | "ENGLISH"
+  | "KOREAN_HISTORY"
+  | "WORLD_HISTORY"
+  | "SOCIAL_STUDIES"
+  | "SCIENCE"
+  | "ART"
+  | "PHYSICAL_EDUCATION"
+  | "TECHNOLOGY"
+  | "MUSIC"
+  | "ETHICS"
+  | "SECOND_LANGUAGE"
+  | "LIBERAL_ARTS"
+  | "IT";
+
+export const tagMap: { [key in Tag]: TagEnum } = {
+  국어: "KOREAN",
+  수학: "MATH",
+  영어: "ENGLISH",
+  한국사: "KOREAN_HISTORY",
+  세계사: "WORLD_HISTORY",
+  사회: "SOCIAL_STUDIES",
+  과학: "SCIENCE",
+  미술: "ART",
+  체육: "PHYSICAL_EDUCATION",
+  기술: "TECHNOLOGY",
+  음악: "MUSIC",
+  윤리: "ETHICS",
+  제2외국어: "SECOND_LANGUAGE",
+  교양: "LIBERAL_ARTS",
+  IT: "IT"
+} as const;
+
 export type Side = "PRO" | "CON";
 
 export type DebateLevel =
@@ -89,7 +124,7 @@ export interface DebateJoinRequest {
 }
 
 export interface DebateCreateRequest {
-  tagList: Tag[];
+  tagList: TagEnum[];
   title: string;
   side: Side;
 }
@@ -98,7 +133,7 @@ export interface DebateQueryResponse {
   debateId: string;
   title: string;
   side: "PRO" | "CON";
-  tags: Tag[];
+  tags: TagEnum[];
 }
 
 export interface Argument {
@@ -108,6 +143,7 @@ export interface Argument {
 }
 
 export interface DebateDoneQueryResponse {
+  title?: string;
   summary?: string;
   feedback?: string;
   data: Argument[];
@@ -116,11 +152,22 @@ export interface DebateDoneQueryResponse {
 export interface DebateDoneQueryAllResponse {
   title: string;
   debateId: string;
-  tags: Tag[];
+  tags: TagEnum[];
   con: number;
   pro: number;
 }
 
 export interface DebateMyQueryAllResponse extends DebateDoneQueryAllResponse {
+  side: Side;
+}
+
+export interface DebateCancelRequest {
+  side: Side;
+  debateId: string;
+  level: DebateLevel;
+}
+
+export interface DebateCancleJoin {
+  debateId: string;
   side: Side;
 }

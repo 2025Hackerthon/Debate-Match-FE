@@ -9,6 +9,7 @@ import { Text, Dropdown } from "../components/common/index";
 import type { GetMyAllResponse } from "../services/types";
 import { debateService, userService } from "../services";
 import { ResultStatus } from "../services/service";
+import { useNavigate } from "react-router-dom";
 
 type EducationLevelLabel =
   | "없음"
@@ -32,6 +33,7 @@ export const Mypage = () => {
   const [debateItems, setDebateItems] = useState<GetMyAllResponse>([]);
   const theme = useTheme() as DEBATETheme;
   const { isOpen, openModal, closeModal } = useModal();
+  const navigate = useNavigate();
 
   const options = Object.keys(educationLevelMap);
 
@@ -56,6 +58,17 @@ export const Mypage = () => {
     }
   }, []);
 
+  const handleLogout = async () => {
+    await userService.logout();
+    navigate("/login");
+  };
+
+  const handleResign = async () => {
+    await userService.resign();
+    closeModal();
+    navigate("/login");
+  };
+
   useEffect(() => {
     fetchDebateItems();
     fetchUserInfo();
@@ -63,7 +76,7 @@ export const Mypage = () => {
 
   return (
     <>
-      <AccountDeleteModal isOpen={isOpen} onClose={closeModal} />
+      <AccountDeleteModal isOpen={isOpen} onClose={handleResign} />
       <Container>
         <ProfileWrapper>
           <LeftSection>
@@ -71,7 +84,7 @@ export const Mypage = () => {
               <Text variant="LabelMedium" color={`${theme.colors.gray[400]}`}>
                 아이디
               </Text>
-              <UserId>sjy08</UserId>
+              <UserId>고양이최고</UserId>
             </InfoRow>
             <InfoRow>
               <DropdownWrapper>
@@ -89,7 +102,7 @@ export const Mypage = () => {
           </LeftSection>
 
           <RightSection>
-            <Button>로그아웃</Button>
+            <Button onClick={handleLogout}>로그아웃</Button>
             <DeleteButton onClick={openModal}>계정삭제</DeleteButton>
           </RightSection>
         </ProfileWrapper>

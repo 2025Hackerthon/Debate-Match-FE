@@ -2,16 +2,18 @@ import styled from "@emotion/styled";
 import { theme } from "../../styles/theme";
 import { Button } from "../common/Button";
 import Logo from "../../assets/Logo.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../../hooks/useModal";
 import { CreateDebateModal } from "../modal/CreateDebateModal";
 import { useState, useEffect } from "react";
 import { userService } from "../../services";
+import { getToken } from "../../services/instance";
 
 export const Header = () => {
   const [username, setUsername] = useState<string | undefined>(undefined);
   const { isOpen, openModal, closeModal } = useModal();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const fetchUserInfo = async () => {
     const res = await userService.info();
@@ -19,8 +21,8 @@ export const Header = () => {
   };
 
   useEffect(() => {
-    fetchUserInfo();
-  }, []);
+    if (getToken()) fetchUserInfo();
+  }, [location.pathname]);
 
   const isLoggedIn = !!username;
 

@@ -13,7 +13,9 @@ import type {
   GetWaitResponse,
   GetDoneResponse,
   GetMyAllResponse,
-  GetDoneAllResponse
+  GetDoneAllResponse,
+  DebateCancelRequest,
+  DebateCancleJoin
 } from "./types";
 
 export class DebateService extends BaseService {
@@ -70,6 +72,49 @@ export class DebateService extends BaseService {
   }
 
   /**
+   * 제출 취소
+   */
+  async cancel(data: DebateCancelRequest): Promise<Result> {
+    try {
+      const res = await instance.delete(
+        this.getEndpoint(`/${data.debateId}/cancel`),
+        {
+          data: {
+            side: data.side,
+            level: data.level
+          }
+        }
+      );
+      return this.success(res.data);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const status = this.handleAxiosError(axiosError);
+      return this.failure(status, axiosError.message);
+    }
+  }
+
+  /**
+   * 참여 취소
+   */
+  async cancelJoin(data: DebateCancleJoin): Promise<Result> {
+    try {
+      const res = await instance.delete(
+        this.getEndpoint(`/${data.debateId}/join/cancle`),
+        {
+          data: {
+            side: data.side
+          }
+        }
+      );
+      return this.success(res.data);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const status = this.handleAxiosError(axiosError);
+      return this.failure(status, axiosError.message);
+    }
+  }
+
+  /**
    * 토론 생성
    */
   async create(
@@ -111,7 +156,7 @@ export class DebateService extends BaseService {
     try {
       const params = new URLSearchParams({ id });
       const res: AxiosResponse<GetDoneResponse> = await instance.get(
-        this.getEndpoint(`/done?${params}`, { cache: true })
+        this.getEndpoint(`/done?${params}`)
       );
       return this.success(res.data);
     } catch (error) {

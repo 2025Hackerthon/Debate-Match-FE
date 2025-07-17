@@ -5,20 +5,22 @@ import type { DEBATETheme } from "../../styles/theme";
 import { Modal, Text, Button } from "../common/index";
 
 interface IProps {
+  title: string;
+  side: "PRO" | "CON";
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const WaitingModal = ({ isOpen, onClose }: IProps) => {
+export const WaitingModal = ({ title, side, isOpen, onClose }: IProps) => {
   const theme = useTheme() as DEBATETheme;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <Wrapper>
         <TextWrapper>
-          <Text variant="TitleSmall">AI가 교사의 역할을 대체할 수 있는가?</Text>
+          <Text variant="TitleSmall">{title}</Text>
           <Text variant="LabelSmall" color={`${theme.colors.gray[500]}`}>
-            현재 반대||찬성 입장으로 참여중입니다
+            현재 {side === "PRO" ? "찬성" : "반대"} 입장으로 참여중입니다
           </Text>
         </TextWrapper>
 

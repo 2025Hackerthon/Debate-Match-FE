@@ -5,6 +5,10 @@ import { TagSelector } from "../debate/TagSelector";
 import { useTheme } from "@emotion/react";
 import type { DEBATETheme } from "../../styles/theme";
 import { Modal, Input, Text, Button } from "../common/index";
+import { debateService } from "../../services";
+import { tagMap, type Tag } from "../../services/types";
+import { ResultStatus } from "../../services/service";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   isOpen: boolean;
@@ -13,12 +17,26 @@ interface IProps {
 
 export const CreateDebateModal = ({ isOpen, onClose }: IProps) => {
   const [title, setTitle] = useState("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [position, setPosition] = useState<"찬성" | "반대">("찬성");
   const theme = useTheme() as DEBATETheme;
+  const navigate = useNavigate();
 
-  const onCreate = () => {
-    //생성 함수
+  const onCreate = async () => {
+    const side = position === "찬성" ? "PRO" : "CON";
+    const res = await debateService.create({
+      side,
+      title,
+      tagList: selectedTags.map(tag => tagMap[tag]!)
+    });
+    if (res.status === ResultStatus.OK) {
+      onClose();
+      navigate(`/debate/${res.data}`, {
+        state: { id: res.data, title, side, isOwner: true }
+      });
+    } else {
+      alert("오류가 발생했습니다");
+    }
   };
 
   return (
@@ -42,7 +60,9 @@ export const CreateDebateModal = ({ isOpen, onClose }: IProps) => {
         <TagSelector
           type="select"
           selectedTags={selectedTags}
-          onChange={setSelectedTags}
+          onChange={values =>
+            setSelectedTags(values.map(value => value as Tag))
+          }
         />
 
         <PositionToggle>

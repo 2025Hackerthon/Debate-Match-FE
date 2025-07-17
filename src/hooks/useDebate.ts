@@ -1,61 +1,105 @@
-import { useState, type Dispatch } from "react";
-import type { Argument, NextLevelEventData } from "../services/types";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { debateService, sseService } from "../services";
+import type { Argument, DebateLevel, Side } from "../services/types";
+import { useNavigate } from "react-router-dom";
 
-type DebateLevel =
-  | "WAIT"
-  | "INTRODUCTION"
-  | "REBUTTAL"
-  | "DEFENSE"
-  | "CONCLUSION";
-
-interface DebateState {
-  level: DebateLevel;
-  handleNext: (set: Dispatch<React.SetStateAction<DebateState>>) => void;
+interface UseDebateProps {
+  debateId: string;
+  userSide: Side;
+  isOwner: boolean;
 }
 
-const wait: DebateState = {
-  level: "WAIT",
-  handleNext: set => set(introduction)
-};
+const levels: DebateLevel[] = [
+  "INTRODUCTION",
+  "REBUTTAL",
+  "DEFENSE",
+  "CONCLUSION"
+];
 
-const introduction: DebateState = {
-  level: "INTRODUCTION",
-  handleNext: set => set(rebuttal)
-};
+export const useDebate = ({ debateId, userSide, isOwner }: UseDebateProps) => {
+  const [level, setLevel] = useState<DebateLevel | "WAIT" | "READY">("WAIT");
+  const [args, setArgs] = useState<Argument[]>([]);
+  const [isConnected, setIsConnected] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const timerRef = useRef<number | null>(null);
+  const navigate = useNavigate();
 
-const rebuttal: DebateState = {
-  level: "REBUTTAL",
-  handleNext: set => set(defence)
-};
+  useEffect(() => {
+    const connectToSse = async () => {
+      try {
+        const eventSource = await sseService.connect(debateId, userSide);
 
-const defence: DebateState = {
-  level: "DEFENSE",
-  handleNext: set => set(conclusion)
-};
+        if (!(eventSource instanceof EventSource)) {
+          throw new Error("Failed to connect to SSE");
+        }
 
-const conclusion: DebateState = {
-  level: "CONCLUSION",
-  handleNext: () => {}
-};
+        eventSource.onopen = () => {
+          setIsConnected(true);
+        };
 
-export const useDebateConnection = (debateConnection: EventSource) => {
-  const [started, setStarted] = useState<boolean>(false);
-  const [state, setState] = useState<DebateState>(wait);
-  const [argumentList, setArgumentList] = useState<Argument[]>([]);
+        eventSource.addEventListener("next level", event => {
+          const newArgs = JSON.parse(event.data) as [Argument, Argument];
+          setArgs(prev => [...prev, ...newArgs]);
 
-  debateConnection.onmessage = event => {
-    if ((event.type as "ready" | "next level") === "ready") {
-      setStarted(true);
-      state.handleNext(setState);
-    } else {
-      setArgumentList([...argumentList, ...(event.data as NextLevelEventData)]);
-      state.handleNext(setState);
+          const currentLevelIndex = levels.indexOf(newArgs[0].level);
+          if (currentLevelIndex === levels.length - 1) {
+            if (timerRef.current !== null) return;
+            timerRef.current = setTimeout(() => {
+              eventSource.close();
+              navigate(`/result/${debateId}`);
+            }, 10 * 1000);
+          } else {
+            setLevel(levels[currentLevelIndex + 1]);
+          }
+        });
+
+        eventSource.onmessage = event => {
+          if (event.data === "match") {
+            setLevel("READY");
+          } else if (event.data === "ready") {
+            setLevel("INTRODUCTION");
+          }
+        };
+
+        eventSource.onerror = () => {
+          setError("SSE connection error");
+          eventSource.close();
+        };
+
+        if (!isOwner) await debateService.join({ debateId, side: userSide });
+
+        return () => {
+          eventSource.close();
+          setIsConnected(false);
+          debateService.cancelJoin({ debateId, side: userSide });
+        };
+      } catch (err) {
+        setError((err as Error).message);
+      }
+    };
+
+    if (debateId && userSide) {
+      connectToSse();
     }
-  };
+  }, [debateId, userSide, isOwner, navigate]);
 
-  return {
-    started,
-    currentState: state,
-    argumentList
-  };
+  const submitArgument = useCallback(
+    async (content: string) => {
+      if (!debateId || level === "WAIT" || level === "READY") return;
+
+      try {
+        await debateService.update({
+          debateId,
+          side: userSide,
+          level,
+          content
+        });
+      } catch (err) {
+        setError((err as Error).message);
+      }
+    },
+    [debateId, userSide, level]
+  );
+
+  return { level, args, isConnected, error, submitArgument };
 };

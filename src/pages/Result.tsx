@@ -6,7 +6,7 @@ import { AiFeedback } from "../components/debate/AiFeedback";
 import { useNavigate, useParams } from "react-router-dom";
 import { Text, Button } from "../components/common/index";
 import { useCallback, useEffect, useState } from "react";
-import { debateService } from "../services";
+import { debateService, reactionService } from "../services";
 import { ResultStatus } from "../services/service";
 import type { DebateDoneQueryResponse } from "../services/types";
 
@@ -42,7 +42,7 @@ export const Result = () => {
               결과
             </Text>
           </Step>
-          <Text variant="TitleSmall">AI가 교사의 역할을 대체할 수 있는가?</Text>
+          <Text variant="TitleSmall">{result?.title}</Text>
         </Banner>
 
         <ContentArea>
@@ -66,7 +66,15 @@ export const Result = () => {
 
         <BottomRow>
           <Text variant="LabelSmall" color={`${theme.colors.sub.normal[20]}`}>
-            사용된 글자 수: 400자 (찬성 측), 510자 (반대 측)
+            사용된 글자 수:{" "}
+            {result?.data
+              .filter(arg => arg.side === "PRO")
+              .reduce((acc, arg) => acc + arg.content.length, 0)}
+            자 (찬성 측),&nbsp;
+            {result?.data
+              .filter(arg => arg.side === "CON")
+              .reduce((acc, arg) => acc + arg.content.length, 0)}
+            자 (반대 측)
           </Text>
 
           <ButtonWrapper>
@@ -80,10 +88,26 @@ export const Result = () => {
               </Button>
             ) : (
               <ButtonContainer>
-                <Button size="large" variant="blue">
+                <Button
+                  size="large"
+                  variant="blue"
+                  onClick={async () => {
+                    await reactionService.reaction({
+                      debateId: id!,
+                      reaction: "PRO"
+                    });
+                    location.reload();
+                  }}
+                >
                   찬성
                 </Button>
-                <Button size="large" variant="red">
+                <Button
+                  size="large"
+                  variant="red"
+                  onClick={() =>
+                    reactionService.reaction({ debateId: id!, reaction: "CON" })
+                  }
+                >
                   반대
                 </Button>
               </ButtonContainer>

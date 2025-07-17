@@ -3,10 +3,11 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { Dropdown } from "../common/Dropdown";
 import { useTheme } from "@emotion/react";
+import type { Tag } from "../../services/types";
 
 interface IProps {
-  selectedTags: string[];
-  onChange: (tags: string[]) => void;
+  selectedTags: Tag[];
+  onChange: (tags: Tag[]) => void;
   type?: "filter" | "select";
 }
 
@@ -18,7 +19,7 @@ export const TagSelector = ({
   const theme = useTheme();
   const [selectedOption, setSelectedOption] = useState("");
 
-  const tags = [
+  const tags: Tag[] = [
     "국어",
     "수학",
     "영어",
@@ -38,7 +39,7 @@ export const TagSelector = ({
 
   const availableTags = tags.filter(tag => !selectedTags.includes(tag));
 
-  const handleSelect = (tag: string) => {
+  const handleSelect = (tag: Tag) => {
     if (selectedTags.includes(tag)) return;
 
     if (type === "select" && selectedTags.length >= 5) {
@@ -62,7 +63,7 @@ export const TagSelector = ({
           value={selectedOption}
           onChange={tag => {
             setSelectedOption(tag);
-            handleSelect(tag);
+            handleSelect(tag as Tag);
           }}
           placeholder="태그 선택"
         />

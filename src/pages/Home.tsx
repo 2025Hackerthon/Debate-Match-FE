@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 import { DebateItem, TagSelector } from "../components/debate/index";
 import { debateService } from "../services";
 import { ResultStatus } from "../services/service";
-import type { GetWaitResponse } from "../services/types";
+import { tagMap, type GetWaitResponse, type Tag } from "../services/types";
 
 export const Home = () => {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [debateItems, setDebateItems] = useState<GetWaitResponse>([]);
   const theme = useTheme() as DEBATETheme;
 
@@ -31,8 +31,14 @@ export const Home = () => {
     selectedTags.length === 0
       ? debateItems
       : debateItems.filter(item =>
-          item.tags.some(tag => selectedTags.includes(tag))
+          item.tags.some(tag =>
+            selectedTags.map(value => tagMap[value]).includes(tag)
+          )
         );
+
+  setTimeout(() => {
+    fetchDebateItems();
+  }, 10000);
 
   return (
     <Wrapper>
@@ -55,13 +61,17 @@ export const Home = () => {
 
       <Content>
         <FilterBar>
-          <TagSelector selectedTags={selectedTags} onChange={setSelectedTags} />
+          <TagSelector
+            selectedTags={selectedTags}
+            onChange={value => setSelectedTags(value as Tag[])}
+          />
         </FilterBar>
 
         <DebateList>
           {filteredItems.map((item, idx) => (
             <DebateItem
               key={idx}
+              id={item.debateId}
               title={item.title}
               tags={item.tags}
               side={item.side}
